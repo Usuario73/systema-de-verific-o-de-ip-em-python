@@ -1,4 +1,4 @@
-# systema-de-verific-o-de-ip-em-python
+# systema-de-verificação-de-ip-em-python
 
 Verificador de IP
 
