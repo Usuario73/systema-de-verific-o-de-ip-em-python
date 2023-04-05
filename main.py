@@ -22,6 +22,8 @@ class VerificadorIP:
         
         self.label_resultado = tk.Label(master, text="")
         self.label_resultado.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+        
+        self.ip_history = []
     
     def verificar(self):
         ip = self.entry_ip.get()
@@ -54,14 +56,21 @@ class VerificadorIP:
             # Verifica o endereço de broadcast
             bc = str(rede.broadcast_address)
 
-            resultado = f"O IP {ip} é da classe {classe}.\nA máscara de sub-rede é {mk}.\nO endereço de broadcast é {bc}."
-
+            resultado = f"A classe do IP {ip} é {classe}.\nA máscara de sub-rede é {mk}.\nO endereço de broadcast é {bc}."
                 
         except ValueError:
             resultado = f"O IP {ip} é inválido."
+        
+        self.ip_history.append(ip) # Adiciona o IP à lista de histórico
 
         # Exibe o resultado na interface
         self.label_resultado.config(text=resultado)
+
+    def mostrar_historico(self):
+        historico = "Histórico de IPs:\n\n"
+        for ip in self.ip_history:
+            historico += ip + "\n"
+        self.label_resultado.config(text=historico)
 
 # Cria a janela principal
 root = tk.Tk()
@@ -69,5 +78,10 @@ root = tk.Tk()
 # Cria o verificador de IP
 verificador = VerificadorIP(root)
 
-# Inicia o loop da interface gráfica
-root.mainloop()
+# Cria o botão para mostrar o histórico
+botao_historico = tk.Button(root, text="Mostrar histórico", command=verificador.mostrar_historico)
+botao_historico.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
+
+
+
+root.tk()
