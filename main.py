@@ -36,7 +36,14 @@ class VerificadorIP:
             elif ipaddress.ip_address(ip).is_reserved:
                 classe = "Reservado"
             elif ipaddress.ip_address(ip).is_global:
-                classe = "Público"
+                # Verifica a classe do IP (A, B ou C)
+                ip_bin = bin(struct.unpack('!I', socket.inet_aton(ip))[0])[2:].zfill(32)
+                if ip_bin[0] == '0':
+                    classe = "Classe A"
+                elif ip_bin[1] == '0':
+                    classe = "Classe B"
+                else:
+                    classe = "Classe C"
             else:
                 classe = "Desconhecido"
 
@@ -47,8 +54,9 @@ class VerificadorIP:
             # Verifica o endereço de broadcast
             bc = str(rede.broadcast_address)
 
-            resultado = f"A classe do IP {ip} é {classe}.\nA máscara de sub-rede é {mk}.\nO endereço de broadcast é {bc}."
-            
+            resultado = f"O IP {ip} é da classe {classe}.\nA máscara de sub-rede é {mk}.\nO endereço de broadcast é {bc}."
+
+                
         except ValueError:
             resultado = f"O IP {ip} é inválido."
 
